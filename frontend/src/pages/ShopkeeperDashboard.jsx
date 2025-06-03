@@ -8,7 +8,7 @@ import BackButton from '../components/common/BackButton';
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://e-commerce-ht4r.onrender.com',
   withCredentials: true
 });
 
@@ -354,4 +354,4 @@ const ShopkeeperDashboard = () => {
   );
 };
 
-export default ShopkeeperDashboard; 
+export default ShopkeeperDashboard;

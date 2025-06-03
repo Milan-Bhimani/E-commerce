@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://e-commerce-ht4r.onrender.com';
 
 const handleResponse = async (response) => {
   if (!response.ok) {
@@ -166,4 +166,4 @@ export const api = {
     });
     return handleResponse(response);
   }
-}; 
+};

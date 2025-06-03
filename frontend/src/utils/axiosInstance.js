@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://e-commerce-ht4r.onrender.com',
   withCredentials: true,
   headers: {
     'Accept': 'application/json',
@@ -24,4 +24,4 @@ api.interceptors.response.use(
 );
 */
 
-export default api; 
+export default api;

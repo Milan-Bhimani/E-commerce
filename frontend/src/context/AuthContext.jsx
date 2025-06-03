@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://e-commerce-ht4r.onrender.com',
   withCredentials: true,
   headers: {
     'Accept': 'application/json',
