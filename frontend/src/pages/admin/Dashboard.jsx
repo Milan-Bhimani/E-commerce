@@ -8,6 +8,7 @@ import TrendingUp from 'lucide-react/dist/esm/icons/trending-up';
 import { IndianRupee } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import BackButton from '../../components/common/BackButton';
+import api from '../../utils/axiosInstance';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -25,7 +26,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('/api/admin/stats');
+        const res = await api.get('/api/admin/stats');
         setStats(res.data);
         setIsLoadingStats(false);
       } catch (error) {
@@ -41,7 +42,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchRecentActivity = async () => {
       try {
-        const res = await axios.get('/api/admin/recent-activity');
+        const res = await api.get('/api/admin/recent-activity');
         setRecentActivities(res.data);
         setIsLoadingRecent(false);
       } catch (error) {
@@ -180,7 +181,7 @@ const AdminDashboard = () => {
             </Link>
 
             {/* Link to Manage Shopkeeper Requests */}
-            <Link to="/admin/users" className="card p-6 hover:shadow-lg transition-shadow hover-scale">
+            <Link to="/admin/shopkeeper-requests" className="card p-6 hover:shadow-lg transition-shadow hover-scale">
               <h3 className="text-xl font-semibold text-[#2D3250] mb-2">Manage Shopkeeper Requests</h3>
               <p className="text-[#7077A1] mb-4">Review and manage pending shopkeeper applications.</p>
               <div className="text-[#F76E11] font-medium">View Requests →</div>

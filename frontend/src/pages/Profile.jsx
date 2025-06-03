@@ -55,7 +55,7 @@ const Profile = () => {
         }
         
         try {
-          const historyResponse = await api.get(`/api/orders/user/${user._id}`);
+          const historyResponse = await api.get('/api/orders/my-orders');
           setPurchaseHistory(historyResponse.data);
         } catch (error) {
           console.error('Error fetching purchase history:', error);
@@ -120,10 +120,13 @@ const Profile = () => {
 
   const handleShopFormChange = (e) => {
     const { name, value, files } = e.target;
+    const newValue = files ? files[0] : value;
+    console.log(`Updating ${name} to:`, newValue);
     setShopDetails(prev => ({
       ...prev,
-      [name]: files ? files[0] : value
+      [name]: newValue
     }));
+    console.log('Shop details state after update:', { ...shopDetails, [name]: newValue });
   };
 
   const handleBecomeShopkeeper = async (e) => {
@@ -131,8 +134,32 @@ const Profile = () => {
     if (!user?._id) return;
     try {
       const formData = new FormData();
-      Object.keys(shopDetails).forEach(key => {
-        formData.append(key, shopDetails[key]);
+      
+      // Add each field directly to formData
+      formData.append('businessName', shopDetails.businessName);
+      formData.append('businessAddress', shopDetails.businessAddress);
+      formData.append('businessPhone', shopDetails.businessPhone);
+      formData.append('businessEmail', shopDetails.businessEmail);
+      formData.append('gstNumber', shopDetails.gstNumber);
+      formData.append('shopDescription', shopDetails.shopDescription);
+      formData.append('businessType', shopDetails.businessType || ''); // Ensure it's not undefined
+      formData.append('openingHours', shopDetails.openingHours);
+      
+      // Add documents separately if they exist
+      if (shopDetails.documents) {
+        formData.append('documents', shopDetails.documents);
+      }
+
+      // Log the form data for debugging
+      console.log('Form data being sent:', {
+        businessName: shopDetails.businessName,
+        businessType: shopDetails.businessType,
+        businessAddress: shopDetails.businessAddress,
+        businessPhone: shopDetails.businessPhone,
+        businessEmail: shopDetails.businessEmail,
+        gstNumber: shopDetails.gstNumber,
+        shopDescription: shopDetails.shopDescription,
+        openingHours: shopDetails.openingHours
       });
 
       await api.post(`/api/users/${user._id}/become-shopkeeper`, formData, {
@@ -146,7 +173,11 @@ const Profile = () => {
       refreshUser();
     } catch (error) {
       console.error('Error becoming shopkeeper:', error);
-      toast.error('Failed to submit shopkeeper request');
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error('Failed to submit shopkeeper request');
+      }
     }
   };
 
@@ -406,8 +437,24 @@ const Profile = () => {
                     <option value="">Select Business Type</option>
                     <option value="retail">Retail</option>
                     <option value="wholesale">Wholesale</option>
-                    <option value="both">Both</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="service">Service</option>
+                    <option value="other">Other</option>
                   </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Shop Description
+                  </label>
+                  <textarea
+                    name="shopDescription"
+                    value={shopDetails.shopDescription}
+                    onChange={handleShopFormChange}
+                    className="form-input"
+                    rows="4"
+                    placeholder="Describe your shop, products, and services..."
+                    required
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[#2D3250] mb-1">

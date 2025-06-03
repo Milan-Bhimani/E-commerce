@@ -194,6 +194,9 @@ router.get('/me', authenticate, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
+    // Log the user object to check isAdmin
+    console.log('Fetched user in /api/auth/me:', user);
+
     res.json({ user });
   } catch (error) {
     console.error('Get user error:', error);

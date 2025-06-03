@@ -33,7 +33,7 @@ const Header = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-[#2D3250] flex items-center hover:text-[#F76E11] transition-colors">
-            ShopEase
+            Cartzy
           </Link>
           
           {/* Desktop Navigation */}
@@ -45,7 +45,7 @@ const Header = () => {
               Products
             </Link>
             
-            {isAuthenticated && user?.isAdmin && (
+            {isAuthenticated && user?.role === 'admin' && (
               <Link to="/admin" className="text-[#7077A1] hover:text-[#F76E11] transition-colors">
                 Admin
               </Link>
@@ -132,7 +132,7 @@ const Header = () => {
                 Products
               </Link>
               
-              {isAuthenticated && user?.isAdmin && (
+              {isAuthenticated && user?.role === 'admin' && (
                 <Link 
                   to="/admin" 
                   className="text-[#7077A1] hover:text-[#F76E11] transition-colors"

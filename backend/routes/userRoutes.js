@@ -110,6 +110,13 @@ router.post('/:id/become-shopkeeper', auth, upload.array('documents'), async (re
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Process uploaded documents
+    const documents = req.files ? req.files.map(file => ({
+      filename: file.originalname,
+      path: file.path,
+      uploadedAt: new Date()
+    })) : [];
+
     // Update shopkeeper details
     user.isShopkeeper = true;
     user.shopkeeperStatus = 'pending';
@@ -121,14 +128,26 @@ router.post('/:id/become-shopkeeper', auth, upload.array('documents'), async (re
       businessEmail,
       gstNumber,
       shopDescription,
-      openingHours
+      openingHours,
+      documents
     };
 
     await user.save();
     res.json({ message: 'Shopkeeper request submitted successfully' });
   } catch (error) {
     console.error('Error submitting shopkeeper request:', error);
-    res.status(500).json({ message: 'Server error' });
+    // If there's an error, delete any uploaded files
+    if (req.files) {
+      req.files.forEach(file => {
+        fs.unlink(file.path, (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
+      });
+    }
+    res.status(500).json({ 
+      message: 'Server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

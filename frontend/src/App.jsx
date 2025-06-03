@@ -17,6 +17,7 @@ import AdminAddProduct from './pages/admin/AddProduct';
 import AdminEditProduct from './pages/admin/EditProduct';
 import ManageUsers from './pages/admin/ManageUsers';
 import ManageOrders from './pages/admin/ManageOrders';
+import ManageShopkeeperRequests from './pages/admin/ManageShopkeeperRequests';
 import Profile from './pages/Profile';
 import ShopkeeperDashboard from './pages/ShopkeeperDashboard';
 import EditProduct from './pages/EditProduct';
@@ -86,6 +87,14 @@ function App() {
                   element={
                     <AdminRoute>
                       <ManageOrders />
+                    </AdminRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/shopkeeper-requests"
+                  element={
+                    <AdminRoute>
+                      <ManageShopkeeperRequests />
                     </AdminRoute>
                   } 
                 />
