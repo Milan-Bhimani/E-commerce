@@ -4,97 +4,108 @@ const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: true
   },
-  items: [
-    {
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        required: true,
-        min: 1,
-      },
-      price: {
-        type: Number,
-        required: true,
-        min: 0,
-      },
+  items: [{
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true
     },
-  ],
-  totalAmount: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  shippingAddress: {
-    street: {
+    name: {
       type: String,
-      required: true,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    }
+  }],
+  shippingAddress: {
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    address: {
+      type: String,
+      required: true
     },
     city: {
       type: String,
-      required: true,
+      required: true
     },
     state: {
       type: String,
-      required: true,
+      required: true
     },
-    postalCode: {
+    zipCode: {
       type: String,
-      required: true,
-    },
-    country: {
-      type: String,
-      required: true,
-    },
+      required: true
+    }
   },
-  paymentMethod: {
-    type: String,
-    required: true,
-    enum: ['credit_card', 'debit_card', 'upi', 'net_banking', 'cod'],
+  paymentInfo: {
+    status: {
+      type: String,
+      required: true,
+      enum: ['pending', 'completed', 'failed'],
+      default: 'pending'
+    },
+    type: {
+      type: String,
+      required: true,
+      enum: ['cash', 'card'],
+      default: 'cash'
+    }
+  },
+  totalPrice: {
+    type: Number,
+    required: true
   },
   status: {
     type: String,
     required: true,
     enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
-    default: 'pending',
+    default: 'pending'
   },
-  paymentStatus: {
-    type: String,
+  isPaid: {
+    type: Boolean,
     required: true,
-    enum: ['pending', 'completed', 'failed', 'refunded'],
-    default: 'pending',
+    default: false
   },
-  trackingNumber: {
-    type: String,
+  paidAt: {
+    type: Date
   },
-  estimatedDelivery: {
-    type: Date,
+  isDelivered: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  notes: {
-    type: String,
-  },
-}, { timestamps: true });
-
-// Method to calculate total amount
-orderSchema.methods.calculateTotal = function() {
-  this.totalAmount = this.items.reduce((total, item) => {
-    return total + (item.price * item.quantity);
-  }, 0);
-  return this.totalAmount;
-};
-
-// Pre-save middleware to ensure total amount is calculated
-orderSchema.pre('save', function(next) {
-  if (this.isModified('items')) {
-    this.calculateTotal();
+  deliveredAt: {
+    type: Date
   }
-  next();
+}, {
+  timestamps: true
 });
+
+// Add indexes for better query performance
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ status: 1 });
 
 const Order = mongoose.model('Order', orderSchema);
 

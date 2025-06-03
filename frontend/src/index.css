@@ -2,16 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+:root {
+  /* Main Theme Colors */
+  --primary: #2D3250;      /* Deep Navy */
+  --primary-dark: #1B1F3B; /* Darker Navy */
+  --secondary: #F76E11;    /* Vibrant Orange */
+  --accent: #FFB84C;       /* Warm Yellow */
+  
+  /* Background Colors */
+  --background: #F7F7F7;   /* Light Gray */
+  --surface: #FFFFFF;      /* White */
+  
+  /* Text Colors */
+  --text: #2D3250;        /* Deep Navy */
+  --text-light: #7077A1;  /* Muted Blue */
+  
+  /* Status Colors */
+  --success: #4CAF50;     /* Green */
+  --error: #FF5252;       /* Red */
+  --warning: #FFB84C;     /* Warm Yellow */
 }
 
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* Modern Card Styles */
+.card {
+  @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+  border: 1px solid rgba(45, 50, 80, 0.05);
+}
+
+/* Button Styles */
+.btn-primary {
+  @apply px-4 py-2 bg-[#2D3250] text-white rounded-lg hover:bg-[#1B1F3B] transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-[#F76E11] text-white rounded-lg hover:bg-[#E65D00] transition-colors duration-200;
+}
+
+.btn-outline {
+  @apply px-4 py-2 border-2 border-[#2D3250] text-[#2D3250] rounded-lg hover:bg-[#2D3250]/5 transition-colors duration-200;
+}
+
+/* Form Styles */
+.form-input {
+  @apply w-full px-4 py-2 border border-[#7077A1]/20 rounded-lg focus:ring-2 focus:ring-[#2D3250] focus:border-transparent outline-none transition-all duration-200;
+}
+
+/* Animation Classes */
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out forwards;
 }
 
 .animate-slide-up {
   animation: slideUp 0.3s ease-out forwards;
+}
+
+.animate-scale {
+  animation: scale 0.3s ease-out forwards;
 }
 
 @keyframes fadeIn {
@@ -34,10 +86,78 @@ body {
   }
 }
 
+@keyframes scale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Hover Effects */
 .hover-scale {
   transition: transform 0.2s ease-in-out;
 }
 
 .hover-scale:hover {
   transform: scale(1.02);
+}
+
+.hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Typography */
+.heading-1 {
+  @apply text-4xl font-bold text-[#2D3250];
+}
+
+.heading-2 {
+  @apply text-3xl font-semibold text-[#2D3250];
+}
+
+.heading-3 {
+  @apply text-2xl font-semibold text-[#7077A1];
+}
+
+.body-text {
+  @apply text-base text-[#7077A1] leading-relaxed;
+}
+
+/* Grid Layout */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Container */
+.container-custom {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }

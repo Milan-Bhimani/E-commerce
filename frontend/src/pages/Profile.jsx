@@ -46,22 +46,19 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchAdditionalUserData = async () => {
-      if (!user?._id) return; // Ensure user and user._id are available
+      if (!user?._id) return;
       try {
-        // Fetch additional data like shopkeeper status and details
         const response = await api.get(`/api/users/${user._id}`);
         
         if (response.data.shopkeeperDetails) {
           setShopDetails(response.data.shopkeeperDetails);
         }
         
-        // Fetch purchase history if available
         try {
           const historyResponse = await api.get(`/api/orders/user/${user._id}`);
           setPurchaseHistory(historyResponse.data);
         } catch (error) {
           console.error('Error fetching purchase history:', error);
-          // Don't show error toast for purchase history as it might not be implemented yet
         }
 
       } catch (error) {
@@ -75,7 +72,6 @@ const Profile = () => {
     fetchAdditionalUserData();
   }, [user]);
 
-  // Update profileDetails if user context changes
   useEffect(() => {
     if (user) {
       setProfileDetails({
@@ -98,7 +94,6 @@ const Profile = () => {
   const handleSaveProfile = async () => {
     if (!user?._id) return;
     try {
-      // Only send allowed fields
       const allowedUpdates = {
         name: profileDetails.name,
         phone: profileDetails.phone,
@@ -169,8 +164,8 @@ const Profile = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
-          <div className="h-64 bg-gray-200 rounded mb-8"></div>
+          <div className="h-8 bg-[#7077A1]/20 rounded w-1/4 mb-8"></div>
+          <div className="h-64 bg-[#7077A1]/20 rounded mb-8"></div>
         </div>
       </div>
     );
@@ -179,26 +174,26 @@ const Profile = () => {
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Profile</h1>
+        <h1 className="text-3xl font-bold text-[#2D3250]">Profile</h1>
         <BackButton />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* User Information Card */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="card p-6 mb-6">
             <div className="flex items-center mb-6">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                <User size={32} className="text-blue-600" />
+              <div className="w-16 h-16 bg-[#7077A1]/10 rounded-full flex items-center justify-center mr-4">
+                <User size={32} className="text-[#F76E11]" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">{profileDetails.name}</h2>
-                <p className="text-gray-600">{profileDetails.email}</p>
+                <h2 className="text-2xl font-bold text-[#2D3250]">{profileDetails.name}</h2>
+                <p className="text-[#7077A1]">{profileDetails.email}</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-[#7077A1]">
                 <Mail size={20} className="mr-2" />
                 {isEditingProfile ? (
                   <input
@@ -206,13 +201,14 @@ const Profile = () => {
                     name="email"
                     value={profileDetails.email}
                     onChange={handleProfileChange}
-                    className="border rounded-md px-2 py-1 w-full text-gray-800"
+                    className="form-input"
+                    disabled
                   />
                 ) : (
                   <span>{profileDetails.email}</span>
                 )}
               </div>
-              <div className="flex items-center text-gray-600">
+              <div className="flex items-center text-[#7077A1]">
                 <Phone size={20} className="mr-2" />
                 {isEditingProfile ? (
                    <input
@@ -220,20 +216,20 @@ const Profile = () => {
                     name="phone"
                     value={profileDetails.phone}
                     onChange={handleProfileChange}
-                    className="border rounded-md px-2 py-1 w-full text-gray-800"
+                    className="form-input"
                    />
                 ) : (
                   <span>{profileDetails.phone || 'Not provided'}</span>
                 )}
               </div>
-              <div className="flex items-start text-gray-600">
+              <div className="flex items-start text-[#7077A1]">
                 <MapPin size={20} className="mr-2 mt-1" />
                 {isEditingProfile ? (
                    <textarea
                     name="address"
                     value={profileDetails.address}
                     onChange={handleProfileChange}
-                    className="border rounded-md px-2 py-1 w-full text-gray-800"
+                    className="form-input"
                     rows="3"
                    />
                 ) : (
@@ -247,25 +243,25 @@ const Profile = () => {
                 <div className="space-x-4">
                   <button
                     onClick={handleCancelEdit}
-                    className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md transition-colors"
+                    className="px-4 py-2 text-[#7077A1] hover:text-[#2D3250] rounded-md transition-colors"
                   >
-                    <XCircle size={20} className="inline mr-1" />
+                    <XCircle size={20} className="inline-block mr-1" />
                     Cancel
                   </button>
                   <button
                     onClick={handleSaveProfile}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
+                    className="btn-primary"
                   >
-                     <Save size={20} className="inline mr-1" />
+                    <Save size={20} className="inline-block mr-1" />
                     Save Changes
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setIsEditingProfile(true)}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors"
+                  className="btn-primary"
                 >
-                   <Edit2 size={20} className="inline mr-1" />
+                  <Edit2 size={20} className="inline-block mr-1" />
                   Edit Profile
                 </button>
               )}
@@ -273,254 +269,192 @@ const Profile = () => {
           </div>
 
           {/* Purchase History */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              <Package size={24} className="mr-2" />
-              Purchase History
-            </h3>
+          <div className="card p-6">
+            <h2 className="text-xl font-semibold text-[#2D3250] mb-4">Purchase History</h2>
             {purchaseHistory.length > 0 ? (
               <div className="space-y-4">
                 {purchaseHistory.map((order) => (
-                  <div key={order._id} className="border-b pb-4 last:border-b-0">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-medium">Order #{order._id}</span>
-                      <span className="text-green-600">₹{order.totalAmount}</span>
+                  <div key={order._id} className="border border-[#7077A1]/20 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <p className="text-[#2D3250] font-medium">Order #{order._id}</p>
+                        <p className="text-sm text-[#7077A1]">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <span className="px-3 py-1 rounded-full text-sm font-medium bg-[#7077A1]/10 text-[#7077A1]">
+                        {order.status}
+                      </span>
                     </div>
-                    <p className="text-sm text-gray-600">
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </p>
+                    <div className="mt-2">
+                      <p className="text-[#7077A1]">
+                        Total: ₹{order.totalAmount.toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-600">No purchase history yet.</p>
+              <p className="text-[#7077A1] text-center py-4">No purchase history available</p>
             )}
           </div>
         </div>
 
-        {/* Shopkeeper Section */}
+        {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              <Store size={24} className="mr-2" />
-              Shopkeeper Status
-            </h3>
-            
-            {user?.shopkeeperStatus === 'pending' ? (
-              <div className="space-y-4">
-                <p className="text-orange-600 font-medium">Your shopkeeper request is pending approval.</p>
-                <p className="text-gray-600 text-sm">We will notify you once your request has been reviewed.</p>
-              </div>
-            ) : user?.isShopkeeper ? (
-              <div className="space-y-4">
-                <p className="text-green-600 font-medium">You are a verified shopkeeper!</p>
-                <Link
-                  to="/shopkeeper/dashboard"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors text-center"
-                >
-                  Go to Shopkeeper Dashboard
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <p className="text-gray-600">
-                  Become a shopkeeper to start selling your products on our platform.
-                </p>
+          <div className="card p-6 mb-6">
+            <h2 className="text-xl font-semibold text-[#2D3250] mb-4">Account Actions</h2>
+            <div className="space-y-4">
+              {!user?.isShopkeeper && !showShopForm && (
                 <button
                   onClick={() => setShowShopForm(true)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                  className="w-full btn-primary"
                 >
-                  Register as Shopkeeper
+                  <Store size={20} className="inline-block mr-1" />
+                  Become a Shopkeeper
                 </button>
-              </div>
-            )}
-
-            <div className="mt-6 pt-6 border-t">
+              )}
               <button
                 onClick={handleLogout}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                className="w-full px-4 py-2 text-[#7077A1] hover:text-[#2D3250] rounded-md transition-colors"
               >
                 Logout
               </button>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Shop Registration Modal */}
-      {showShopForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold">Register Your Shop</h3>
-              <button
-                onClick={() => setShowShopForm(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleBecomeShopkeeper} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {showShopForm && (
+            <div className="card p-6">
+              <h2 className="text-xl font-semibold text-[#2D3250] mb-4">Shopkeeper Application</h2>
+              <form onSubmit={handleBecomeShopkeeper} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Name *
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Business Name
                   </label>
                   <input
                     type="text"
                     name="businessName"
                     value={shopDetails.businessName}
                     onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Type *
-                  </label>
-                  <select
-                    name="businessType"
-                    value={shopDetails.businessType}
-                    onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
-                    required
-                  >
-                    <option value="">Select Business Type</option>
-                    <option value="retail">Retail Store</option>
-                    <option value="wholesale">Wholesale</option>
-                    <option value="manufacturing">Manufacturing</option>
-                    <option value="service">Service Provider</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Address *
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Business Address
                   </label>
                   <textarea
                     name="businessAddress"
                     value={shopDetails.businessAddress}
                     onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     rows="3"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Phone *
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Business Phone
                   </label>
                   <input
                     type="tel"
                     name="businessPhone"
                     value={shopDetails.businessPhone}
                     onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Email *
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Business Email
                   </label>
                   <input
                     type="email"
                     name="businessEmail"
                     value={shopDetails.businessEmail}
                     onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    GST Number *
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    GST Number
                   </label>
                   <input
                     type="text"
                     name="gstNumber"
                     value={shopDetails.gstNumber}
                     onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     required
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Opening Hours *
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Business Type
+                  </label>
+                  <select
+                    name="businessType"
+                    value={shopDetails.businessType}
+                    onChange={handleShopFormChange}
+                    className="form-input"
+                    required
+                  >
+                    <option value="">Select Business Type</option>
+                    <option value="retail">Retail</option>
+                    <option value="wholesale">Wholesale</option>
+                    <option value="both">Both</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Opening Hours
                   </label>
                   <input
                     type="text"
                     name="openingHours"
                     value={shopDetails.openingHours}
                     onChange={handleShopFormChange}
+                    className="form-input"
                     placeholder="e.g., 9:00 AM - 6:00 PM"
-                    className="w-full px-3 py-2 border rounded-md"
                     required
                   />
                 </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Shop Description *
-                  </label>
-                  <textarea
-                    name="shopDescription"
-                    value={shopDetails.shopDescription}
-                    onChange={handleShopFormChange}
-                    className="w-full px-3 py-2 border rounded-md"
-                    rows="3"
-                    required
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Business Documents (GST Certificate, Business License, etc.) *
+                <div>
+                  <label className="block text-sm font-medium text-[#2D3250] mb-1">
+                    Business Documents
                   </label>
                   <input
                     type="file"
                     name="documents"
                     onChange={handleShopFormChange}
-                    className="w-full"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    multiple
+                    className="form-input"
                     required
                   />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Upload relevant business documents (PDF, JPG, PNG)
-                  </p>
                 </div>
-              </div>
-
-              <div className="flex justify-end space-x-4 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setShowShopForm(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-                >
-                  Submit Application
-                </button>
-              </div>
-            </form>
-          </div>
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowShopForm(false)}
+                    className="flex-1 px-4 py-2 text-[#7077A1] hover:text-[#2D3250] rounded-md transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 btn-primary"
+                  >
+                    Submit Application
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

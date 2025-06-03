@@ -204,4 +204,85 @@ router.put('/shopkeeper/:id/status', [auth, admin], async (req, res) => {
   }
 });
 
+// Admin: Get all users
+router.get('/admin/users', [auth, admin], async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Update user role
+router.put('/admin/users/:id/role', [auth, admin], async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!['user', 'admin', 'shopkeeper'].includes(role)) {
+      return res.status(400).json({ message: 'Invalid role' });
+    }
+
+    await user.updateRole(role);
+    res.json(user);
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Update user status
+router.put('/admin/users/:id/status', [auth, admin], async (req, res) => {
+  try {
+    const { status } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!['active', 'inactive'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    user.status = status;
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    console.error('Error updating user status:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Delete user
+router.delete('/admin/users/:id', [auth, admin], async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Prevent deleting the last admin
+    if (user.role === 'admin') {
+      const adminCount = await User.countDocuments({ role: 'admin' });
+      if (adminCount <= 1) {
+        return res.status(400).json({ message: 'Cannot delete the last admin user' });
+      }
+    }
+
+    await user.remove();
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 export default router; 

@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast';
 import PlusCircle from 'lucide-react/dist/esm/icons/plus-circle';
 import Search from 'lucide-react/dist/esm/icons/search';
 import ProductCard from '../../components/product/ProductCard';
+import BackButton from '../../components/common/BackButton';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -44,7 +45,10 @@ const AdminProducts = () => {
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-gray-800">Manage Products</h1>
+        <div className="flex items-center gap-4">
+          <BackButton to="/admin" text="Back to Dashboard" />
+          <h1 className="text-3xl font-bold text-[#2D3250]">Manage Products</h1>
+        </div>
         
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative">
@@ -53,14 +57,14 @@ const AdminProducts = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 w-full sm:w-64"
+              className="form-input pl-10 w-full sm:w-64"
             />
-            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#7077A1]" />
           </div>
           
           <Link
             to="/admin/products/add"
-            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium flex items-center justify-center hover-scale"
+            className="btn-primary flex items-center justify-center hover-scale"
           >
             <PlusCircle size={18} className="mr-2" />
             Add Product
@@ -70,7 +74,7 @@ const AdminProducts = () => {
       
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#F76E11]"></div>
         </div>
       ) : products.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -83,14 +87,14 @@ const AdminProducts = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 bg-white rounded-lg shadow-md">
-          <p className="text-xl text-gray-600 mb-4">No products found.</p>
+        <div className="card p-8 text-center">
+          <p className="text-xl text-[#7077A1] mb-4">No products found.</p>
           {searchTerm ? (
-            <p className="text-gray-500">Try changing your search term.</p>
+            <p className="text-[#7077A1]">Try changing your search term.</p>
           ) : (
             <Link
               to="/admin/products/add"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md font-medium hover-scale"
+              className="btn-primary inline-block hover-scale"
             >
               Add Your First Product
             </Link>

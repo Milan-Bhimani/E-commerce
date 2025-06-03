@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin', 'shopkeeper'],
     default: 'user'
   },
+  status: {
+    type: String,
+    enum: ['active', 'inactive'],
+    default: 'active'
+  },
   phone: {
     type: String,
     trim: true

@@ -22,27 +22,22 @@ const ProductList = () => {
         // Construct query parameters dynamically
         const queryParams = new URLSearchParams();
         if (searchTerm) queryParams.append('search', searchTerm);
-        if (category !== 'all') queryParams.append('category', category); // Only add category if it's not 'all'
+        if (category !== 'all') queryParams.append('category', category);
         if (sortBy) queryParams.append('sort', sortBy);
-        queryParams.append('limit', 100); // Increased limit
+        queryParams.append('limit', 100);
         
         const res = await axios.get(`/api/products?${queryParams.toString()}`);
-        
-        // Set the products state with the array from the response
-        setProducts(res.data.products); // Corrected to access the products array
+        setProducts(res.data.products);
       } catch (error) {
         console.error('Error fetching products:', error);
-        // Optionally set an error state to display a message to the user
       } finally {
         setIsLoading(false);
       }
     };
     
     fetchProducts();
-  }, [searchTerm, category, sortBy]); // Re-run effect when filters or sort change
+  }, [searchTerm, category, sortBy]);
   
-  // Filter and sort products (This client-side filtering/sorting is less efficient
-  // now that the backend supports it. Consider removing this and relying on the backend)
   const filteredProducts = products
     .filter(product => 
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -59,16 +54,16 @@ const ProductList = () => {
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Products</h1>
+        <h1 className="text-3xl font-bold text-[#2D3250]">Products</h1>
         <BackButton />
       </div>
       
       {/* Filters and Search */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-8">
+      <div className="card p-4 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="search" className="block text-sm font-medium text-[#2D3250] mb-1">
               Search
             </label>
             <input
@@ -78,13 +73,13 @@ const ProductList = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search products..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
             />
           </div>
           
           {/* Category Filter */}
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="category" className="block text-sm font-medium text-[#2D3250] mb-1">
               Category
             </label>
             <select
@@ -93,7 +88,7 @@ const ProductList = () => {
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -105,7 +100,7 @@ const ProductList = () => {
           
           {/* Sort */}
           <div>
-            <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="sort" className="block text-sm font-medium text-[#2D3250] mb-1">
               Sort By
             </label>
             <select
@@ -114,7 +109,7 @@ const ProductList = () => {
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="form-input"
             >
               <option value="name-asc">Name (A-Z)</option>
               <option value="name-desc">Name (Z-A)</option>
@@ -128,19 +123,18 @@ const ProductList = () => {
       {/* Products Grid */}
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#F76E11]"></div>
         </div>
       ) : products.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {/* Render products directly from the state since filtering/sorting is handled by backend */}
           {products.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-xl text-gray-600">No products found.</p>
-          <p className="text-gray-500 mt-2">Try changing your search criteria.</p>
+          <p className="text-xl text-[#7077A1]">No products found.</p>
+          <p className="text-[#7077A1]/80 mt-2">Try changing your search criteria.</p>
         </div>
       )}
     </div>

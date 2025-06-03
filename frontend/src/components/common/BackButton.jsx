@@ -1,17 +1,29 @@
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
 
-const BackButton = ({ className = '' }) => {
+const BackButton = ({ to, text = 'Back' }) => {
   const navigate = useNavigate();
 
+  if (!to) {
+    return (
+      <button 
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center text-[#7077A1] hover:text-[#2D3250] transition-colors"
+      >
+        <ChevronLeft size={16} />
+        <span>{text}</span>
+      </button>
+    );
+  }
+
   return (
-    <button
-      onClick={() => navigate(-1)}
-      className={`flex items-center text-gray-600 hover:text-gray-800 transition-colors ${className}`}
+    <Link 
+      to={to} 
+      className="inline-flex items-center text-[#7077A1] hover:text-[#2D3250] transition-colors"
     >
-      <ArrowLeft size={20} className="mr-1" />
-      Back
-    </button>
+      <ChevronLeft size={16} />
+      <span>{text}</span>
+    </Link>
   );
 };
 

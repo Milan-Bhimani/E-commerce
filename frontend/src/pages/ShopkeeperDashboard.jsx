@@ -160,12 +160,12 @@ const ShopkeeperDashboard = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <AlertCircle size={48} className="mx-auto text-gray-400 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Please Log In</h2>
-          <p className="text-gray-600 mb-4">You need to be logged in to access the shopkeeper dashboard.</p>
+          <AlertCircle size={48} className="mx-auto text-[#7077A1] mb-4" />
+          <h2 className="text-2xl font-bold text-[#2D3250] mb-2">Please Log In</h2>
+          <p className="text-[#7077A1] mb-4">You need to be logged in to access the shopkeeper dashboard.</p>
           <button
             onClick={() => navigate('/login')}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+            className="btn-primary"
           >
             Go to Login
           </button>
@@ -178,8 +178,8 @@ const ShopkeeperDashboard = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
-          <div className="h-64 bg-gray-200 rounded mb-8"></div>
+          <div className="h-8 bg-[#7077A1]/10 rounded w-1/4 mb-8"></div>
+          <div className="h-64 bg-[#7077A1]/10 rounded mb-8"></div>
         </div>
       </div>
     );
@@ -188,19 +188,19 @@ const ShopkeeperDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Shopkeeper Dashboard</h1>
-        <BackButton />
+        <h1 className="text-3xl font-bold text-[#2D3250]">Shopkeeper Dashboard</h1>
+        <BackButton to="/" text="Back to Home" />
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+      <div className="card p-6 mb-8">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center">
+          <h2 className="text-2xl font-bold text-[#2D3250] flex items-center">
             <Package size={24} className="mr-2" />
             My Products
           </h2>
           <button
             onClick={() => setShowAddProduct(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center"
+            className="btn-primary flex items-center hover-scale"
           >
             <Plus size={20} className="mr-2" />
             Add Product
@@ -210,16 +210,16 @@ const ShopkeeperDashboard = () => {
         {products.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
-              <div key={product._id} className="border rounded-lg p-4">
+              <div key={product._id} className="card p-4 hover-scale">
                 <img
                   src={`${api.defaults.baseURL}${product.image}`}
                   alt={product.name}
                   className="w-full h-48 object-cover rounded-md mb-4"
                 />
-                <h3 className="font-bold text-lg mb-2">{product.name}</h3>
-                <p className="text-gray-600 mb-2">₹{product.price}</p>
-                <p className="text-sm text-gray-500 mb-2">{product.description}</p>
-                <p className="text-sm text-gray-500 mb-4">
+                <h3 className="font-bold text-lg text-[#2D3250] mb-2">{product.name}</h3>
+                <p className="text-[#F76E11] font-medium mb-2">₹{product.price}</p>
+                <p className="text-sm text-[#7077A1] mb-2">{product.description}</p>
+                <p className="text-sm text-[#7077A1] mb-4">
                   Stock: {product.stock} {product.stock <= 5 ? (
                     <span className="text-red-500">(Low stock!)</span>
                   ) : null}
@@ -227,14 +227,14 @@ const ShopkeeperDashboard = () => {
                 <div className="flex justify-between">
                   <button
                     onClick={() => navigate(`/products/${product._id}/edit`)}
-                    className="text-blue-600 hover:text-blue-700 flex items-center"
+                    className="text-[#2D3250] hover:text-[#F76E11] flex items-center transition-colors"
                   >
                     <Edit size={16} className="mr-1" />
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteProduct(product._id)}
-                    className="text-red-600 hover:text-red-700 flex items-center"
+                    className="text-[#7077A1] hover:text-red-500 flex items-center transition-colors"
                   >
                     <Trash2 size={16} className="mr-1" />
                     Delete
@@ -245,8 +245,8 @@ const ShopkeeperDashboard = () => {
           </div>
         ) : (
           <div className="text-center py-8">
-            <AlertCircle size={48} className="mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600">No products added yet.</p>
+            <AlertCircle size={48} className="mx-auto text-[#7077A1] mb-4" />
+            <p className="text-[#7077A1]">No products added yet.</p>
           </div>
         )}
       </div>
@@ -254,54 +254,38 @@ const ShopkeeperDashboard = () => {
       {/* Add Product Modal */}
       {showAddProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">Add New Product</h3>
+          <div className="card p-6 w-full max-w-2xl">
+            <h2 className="text-2xl font-bold text-[#2D3250] mb-6">Add New Product</h2>
             <form onSubmit={handleAddProduct}>
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Product Name
-                  </label>
+                  <label className="block text-sm font-medium text-[#7077A1] mb-1">Product Name*</label>
                   <input
                     type="text"
                     value={newProduct.name}
                     onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    value={newProduct.description}
-                    onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md"
-                    rows="3"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Price (₹)
-                  </label>
+                  <label className="block text-sm font-medium text-[#7077A1] mb-1">Price (₹)*</label>
                   <input
                     type="number"
                     value={newProduct.price}
                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
+                    step="0.01"
+                    min="0"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category
-                  </label>
+                  <label className="block text-sm font-medium text-[#7077A1] mb-1">Category*</label>
                   <select
                     value={newProduct.category}
                     onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     required
                   >
                     <option value="">Select a category</option>
@@ -313,42 +297,51 @@ const ShopkeeperDashboard = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Stock
-                  </label>
+                  <label className="block text-sm font-medium text-[#7077A1] mb-1">Stock*</label>
                   <input
                     type="number"
                     value={newProduct.stock}
                     onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-md"
+                    className="form-input"
                     min="0"
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Product Image
-                  </label>
-                  <input
-                    type="file"
-                    onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })}
-                    className="w-full"
-                    accept="image/*"
-                    required
-                  />
-                </div>
               </div>
-              <div className="mt-6 flex justify-end space-x-4">
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-[#7077A1] mb-1">Description*</label>
+                <textarea
+                  value={newProduct.description}
+                  onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                  className="form-input"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-[#7077A1] mb-1">Product Image*</label>
+                <input
+                  type="file"
+                  onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })}
+                  className="form-input"
+                  accept="image/*"
+                  required
+                />
+                <p className="text-xs text-[#7077A1] mt-1">
+                  Recommended size: 800x600 pixels, max 2MB
+                </p>
+              </div>
+              <div className="flex justify-end gap-4">
                 <button
                   type="button"
                   onClick={() => setShowAddProduct(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                  className="btn-primary hover-scale"
                 >
                   Add Product
                 </button>

@@ -35,21 +35,10 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
-// Serve static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/images', express.static(path.join(__dirname, 'public/images')));
-
-// Connect to MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/shopease';
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
 // Import routes
 console.log('Loading routes...');
 const userRoutes = (await import('./routes/userRoutes.js')).default;
 const authRoutes = (await import('./routes/auth.js')).default;
-// const productRoutes = (await import('./routes/productRoutes.js')).default;
 const orderRoutes = (await import('./routes/orderRoutes.js')).default;
 const adminRoutes = (await import('./routes/admin.js')).default;
 const productsRoutes = (await import('./routes/products.js')).default;
@@ -61,6 +50,16 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+
+// Connect to MongoDB
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/shopease';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

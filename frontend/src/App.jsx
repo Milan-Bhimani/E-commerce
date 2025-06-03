@@ -19,8 +19,10 @@ import ManageUsers from './pages/admin/ManageUsers';
 import ManageOrders from './pages/admin/ManageOrders';
 import Profile from './pages/Profile';
 import ShopkeeperDashboard from './pages/ShopkeeperDashboard';
+import EditProduct from './pages/EditProduct';
 import AdminRoute from './components/AdminRoute';
 import ShopkeeperRoute from './components/auth/ShopkeeperRoute';
+import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
   return (
@@ -95,6 +97,15 @@ function App() {
                     </ShopkeeperRoute>
                   } 
                 />
+                <Route 
+                  path="/products/:id/edit" 
+                  element={
+                    <ShopkeeperRoute>
+                      <EditProduct />
+                    </ShopkeeperRoute>
+                  } 
+                />
+                <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
               </Routes>
             </main>
             <Footer />

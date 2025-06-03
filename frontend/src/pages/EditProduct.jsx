@@ -1,21 +1,50 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import BackButton from '../../components/common/BackButton';
+import { ChevronLeft } from 'lucide-react';
 
-const AddProduct = () => {
+const EditProduct = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     description: '',
     stock: '',
-    image: null, // Store the actual file object here
-    category: 'electronics' // Default category
+    image: '',
+    category: ''
   });
   
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(`/api/products/${id}`);
+        const product = res.data;
+        
+        setFormData({
+          name: product.name,
+          price: product.price.toString(),
+          description: product.description,
+          stock: product.stock.toString(),
+          image: product.image,
+          category: product.category || 'electronics'
+        });
+        
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        toast.error('Failed to load product data');
+        navigate('/shopkeeper-dashboard');
+      }
+    };
+    
+    fetchProduct();
+  }, [id, navigate]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +54,6 @@ const AddProduct = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Store the file object
       setFormData({ ...formData, image: file });
     }
   };
@@ -33,53 +61,60 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Basic validation
-    if (!formData.name || !formData.price || !formData.description || !formData.stock || !formData.image) {
-      toast.error('Please fill in all required fields (including image)');
+    if (!formData.name || !formData.price || !formData.description || !formData.stock) {
+      toast.error('Please fill in all required fields');
       return;
     }
     
-    setIsSubmitting(true);
-    
-    const productFormData = new FormData();
-    productFormData.append('name', formData.name);
-    productFormData.append('price', formData.price);
-    productFormData.append('description', formData.description);
-    productFormData.append('stock', formData.stock);
-    productFormData.append('category', formData.category);
-    productFormData.append('image', formData.image); // Append the actual image file
-
     try {
-      // Send the form data as multipart/form-data
-      await axios.post('/api/products', productFormData, {
+      setIsSubmitting(true);
+      
+      const formDataToSend = new FormData();
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('stock', formData.stock);
+      formDataToSend.append('category', formData.category);
+      
+      if (formData.image instanceof File) {
+        formDataToSend.append('image', formData.image);
+      }
+      
+      await axios.put(`/api/products/${id}`, formDataToSend, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+          'Content-Type': 'multipart/form-data'
+        }
       });
       
-      toast.success('Product added successfully');
-      navigate('/admin/products');
+      toast.success('Product updated successfully');
+      navigate('/shopkeeper-dashboard');
     } catch (error) {
-      console.error('Error adding product:', error);
-      // Check if the error response has a data object with a message
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.error(`Failed to add product: ${error.response.data.message}`);
-      } else {
-        toast.error('Failed to add product. Please try again.');
-      }
+      console.error('Error updating product:', error);
+      toast.error('Failed to update product');
     } finally {
       setIsSubmitting(false);
     }
   };
   
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#F76E11]"></div>
+      </div>
+    );
+  }
+  
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
       <div className="mb-6">
-        <BackButton to="/admin/products" text="Back to Products" />
+        <Link to="/shopkeeper-dashboard" className="inline-flex items-center text-[#7077A1] hover:text-[#2D3250] transition-colors">
+          <ChevronLeft size={16} />
+          <span>Back to Dashboard</span>
+        </Link>
       </div>
       
       <div className="card p-6">
-        <h1 className="text-2xl font-bold text-[#2D3250] mb-6">Add New Product</h1>
+        <h1 className="text-2xl font-bold text-[#2D3250] mb-6">Edit Product</h1>
         
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -172,10 +207,22 @@ const AddProduct = () => {
             ></textarea>
           </div>
           
+          {/* Current Image Preview */}
+          <div className="mb-4">
+            <p className="block text-sm font-medium text-[#7077A1] mb-1">Current Image</p>
+            <div className="w-32 h-32 border rounded-md overflow-hidden">
+              <img 
+                src={formData.image} 
+                alt={formData.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          
           {/* Image Upload */}
           <div className="mb-6">
             <label htmlFor="image" className="block text-sm font-medium text-[#7077A1] mb-1">
-              Product Image*
+              Replace Image
             </label>
             <input
               type="file"
@@ -183,11 +230,10 @@ const AddProduct = () => {
               name="image"
               onChange={handleImageChange}
               accept="image/*"
-              required // Make image required for submission
               className="form-input"
             />
             <p className="text-xs text-[#7077A1] mt-1">
-              Recommended size: 800x600 pixels, max 5MB
+              Recommended size: 800x600 pixels, max 2MB
             </p>
           </div>
           
@@ -195,7 +241,7 @@ const AddProduct = () => {
           <div className="flex justify-end">
             <button
               type="button"
-              onClick={() => navigate('/admin/products')}
+              onClick={() => navigate('/shopkeeper-dashboard')}
               className="btn-secondary mr-4"
             >
               Cancel
@@ -212,9 +258,11 @@ const AddProduct = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Adding...
+                  Updating...
                 </span>
-              ) : 'Add Product'}
+              ) : (
+                'Update Product'
+              )}
             </button>
           </div>
         </form>
@@ -223,4 +271,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default EditProduct; 

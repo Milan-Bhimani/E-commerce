@@ -20,7 +20,7 @@ const ProductCard = ({ product, onDelete }) => {
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-lg">
+    <div className="card hover-lift">
       <Link to={`/product/${product._id}`}>
         <div className="h-48 overflow-hidden">
           <img 
@@ -33,15 +33,15 @@ const ProductCard = ({ product, onDelete }) => {
       
       <div className="p-4">
         <Link to={`/product/${product._id}`}>
-          <h2 className="font-semibold text-lg mb-1 text-gray-800 hover:text-blue-600 transition-colors">
+          <h2 className="font-semibold text-lg mb-1 text-[#2D3250] hover:text-[#F76E11] transition-colors">
             {product.name}
           </h2>
         </Link>
         
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+        <p className="text-[#7077A1] text-sm mb-3 line-clamp-2">{product.description}</p>
         
         <div className="flex justify-between items-center">
-          <p className="text-blue-600 font-bold flex items-center">
+          <p className="text-[#F76E11] font-bold flex items-center">
             <IndianRupee size={16} className="mr-1" />{product.price.toFixed(2)}
           </p>
           
@@ -50,13 +50,13 @@ const ProductCard = ({ product, onDelete }) => {
               <>
                 <Link 
                   to={`/admin/products/edit/${product._id}`}
-                  className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                  className="p-2 text-[#7077A1] hover:text-[#F76E11] transition-colors"
                 >
                   <Edit size={18} />
                 </Link>
                 <button 
                   onClick={() => onDelete(product._id)}
-                  className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+                  className="p-2 text-[#7077A1] hover:text-[#FF5252] transition-colors"
                 >
                   <Trash2 size={18} />
                 </button>
@@ -64,7 +64,7 @@ const ProductCard = ({ product, onDelete }) => {
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors flex items-center justify-center"
+                className="bg-[#F76E11] hover:bg-[#E65D00] text-white p-2 rounded-full transition-colors flex items-center justify-center"
               >
                 <ShoppingCart size={18} />
               </button>
