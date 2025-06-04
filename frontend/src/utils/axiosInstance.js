@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://e-commerce-ht4r.onrender.com',
+  baseURL: import.meta.env.VITE_API_URL || 'https://e-commerce-ht4r.onrender.com',
   withCredentials: true,
   headers: {
     'Accept': 'application/json',
@@ -9,19 +9,15 @@ const api = axios.create({
   }
 });
 
-// Optional: Add an interceptor here if needed, similar to the one in AuthContext.jsx
-/*
+// Add response interceptor to handle auth errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle 401 errors, e.g., redirect to login
-      // Note: Be careful with redirecting here, might cause issues in some contexts
       console.error('Unauthorized request:', error.response.data.message);
     }
     return Promise.reject(error);
   }
 );
-*/
 
 export default api;
