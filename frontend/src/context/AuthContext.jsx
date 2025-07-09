@@ -3,7 +3,9 @@ import axios from 'axios';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: 'https://e-commerce-ht4r.onrender.com',
+  baseURL: process.env.NODE_ENV === 'production'
+    ? 'https://e-commerce-ht4r.onrender.com'
+    : window.location.origin,
   withCredentials: true,
   headers: {
     'Accept': 'application/json',

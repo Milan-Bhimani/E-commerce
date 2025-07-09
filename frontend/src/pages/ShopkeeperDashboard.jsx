@@ -1,16 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Plus, Package, Edit, Trash2, AlertCircle } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import BackButton from '../components/common/BackButton';
-
-// Create axios instance with base URL
-const api = axios.create({
-  baseURL: 'https://e-commerce-ht4r.onrender.com',
-  withCredentials: true
-});
+import api from '../utils/axiosInstance';
 
 const ShopkeeperDashboard = () => {
   const { user } = useContext(AuthContext);

@@ -49,6 +49,11 @@ const OrderConfirmation = () => {
       </div>
     );
   }
+
+  // Calculate GST and subtotal from totalPrice
+  const gstRate = 0.28;
+  const gstAmount = order.totalPrice * gstRate / (1 + gstRate);
+  const subtotal = order.totalPrice / (1 + gstRate);
   
   return (
     <div className="container mx-auto px-4 py-8 animate-fade-in">
@@ -123,21 +128,21 @@ const OrderConfirmation = () => {
                 <span>Subtotal</span>
                 <span className="flex items-center">
                   <IndianRupee size={16} className="mr-1" />
-                  {order.totalPrice.toFixed(2)}
+                  {subtotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-[#7077A1]">
                 <span>GST (28%)</span>
                 <span className="flex items-center">
                   <IndianRupee size={16} className="mr-1" />
-                  {(order.totalPrice * 0.28).toFixed(2)}
+                  {gstAmount.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-lg font-semibold text-[#2D3250]">
                 <span>Total</span>
                 <span className="flex items-center text-[#F76E11]">
                   <IndianRupee size={20} className="mr-1" />
-                  {(order.totalPrice * 1.28).toFixed(2)}
+                  {order.totalPrice.toFixed(2)}
                 </span>
               </div>
             </div>

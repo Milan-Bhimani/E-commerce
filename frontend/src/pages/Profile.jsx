@@ -1,20 +1,10 @@
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { User, Package, Store, MapPin, Phone, Mail, Building2, Receipt, Edit2, Save, XCircle } from 'lucide-react';
 import AuthContext from '../context/AuthContext';
 import BackButton from '../components/common/BackButton';
-
-// Create axios instance with default config
-const api = axios.create({
-  baseURL: 'https://e-commerce-ht4r.onrender.com',
-  withCredentials: true,
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
-});
+import api from '../utils/axiosInstance';
 
 const Profile = () => {
   const { user, logout, refreshUser } = useContext(AuthContext);

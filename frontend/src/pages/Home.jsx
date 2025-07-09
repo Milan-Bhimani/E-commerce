@@ -29,21 +29,7 @@ const Home = () => {
     fetchFeaturedProducts();
   }, []);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('/api/products');
-        const productsData = response.data.products || response.data;
-        setProducts(Array.isArray(productsData) ? productsData : []);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        toast.error('Failed to load products');
-        setProducts([]);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  // Removed duplicate fetchProducts useEffect to avoid unnecessary API calls
 
   const filteredProducts = Array.isArray(products) ? products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -1,9 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
+import MainLayout from './components/layout/MainLayout';
 import Home from './pages/Home';
 import ProductList from './pages/ProductList';
 import ProductDetail from './pages/ProductDetail';
@@ -25,104 +24,48 @@ import AdminRoute from './components/AdminRoute';
 import ShopkeeperRoute from './components/auth/ShopkeeperRoute';
 import OrderConfirmation from './pages/OrderConfirmation';
 
+const routes = [
+  {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+      { path: '/', element: <Home /> },
+      { path: '/products', element: <ProductList /> },
+      { path: '/product/:id', element: <ProductDetail /> },
+      { path: '/login', element: <Login /> },
+      { path: '/register', element: <Register /> },
+      { path: '/cart', element: <Cart /> },
+      { path: '/checkout', element: <Checkout /> },
+      { path: '/profile', element: <Profile /> },
+      { path: '/admin', element: <AdminRoute><AdminDashboard /></AdminRoute> },
+      { path: '/admin/products', element: <AdminRoute><AdminProducts /></AdminRoute> },
+      { path: '/admin/products/add', element: <AdminRoute><AdminAddProduct /></AdminRoute> },
+      { path: '/admin/products/edit/:id', element: <AdminRoute><AdminEditProduct /></AdminRoute> },
+      { path: '/admin/users', element: <AdminRoute><ManageUsers /></AdminRoute> },
+      { path: '/admin/orders', element: <AdminRoute><ManageOrders /></AdminRoute> },
+      { path: '/admin/shopkeeper-requests', element: <AdminRoute><ManageShopkeeperRequests /></AdminRoute> },
+      { path: '/shopkeeper/dashboard', element: <ShopkeeperRoute><ShopkeeperDashboard /></ShopkeeperRoute> },
+      { path: '/products/:id/edit', element: <ShopkeeperRoute><EditProduct /></ShopkeeperRoute> },
+      { path: '/order-confirmation/:orderId', element: <OrderConfirmation /> },
+    ],
+  },
+];
+
+const router = createBrowserRouter(routes, {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
+});
+
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <CartProvider>
-          <div className="flex flex-col min-h-screen bg-gray-50">
-            <Header />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<ProductList />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route 
-                  path="/admin" 
-                  element={
-                    <AdminRoute>
-                      <AdminDashboard />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/products" 
-                  element={
-                    <AdminRoute>
-                      <AdminProducts />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/products/add" 
-                  element={
-                    <AdminRoute>
-                      <AdminAddProduct />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/products/edit/:id" 
-                  element={
-                    <AdminRoute>
-                      <AdminEditProduct />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/users" 
-                  element={
-                    <AdminRoute>
-                      <ManageUsers />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/orders" 
-                  element={
-                    <AdminRoute>
-                      <ManageOrders />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/admin/shopkeeper-requests"
-                  element={
-                    <AdminRoute>
-                      <ManageShopkeeperRequests />
-                    </AdminRoute>
-                  } 
-                />
-                <Route 
-                  path="/shopkeeper/dashboard" 
-                  element={
-                    <ShopkeeperRoute>
-                      <ShopkeeperDashboard />
-                    </ShopkeeperRoute>
-                  } 
-                />
-                <Route 
-                  path="/products/:id/edit" 
-                  element={
-                    <ShopkeeperRoute>
-                      <EditProduct />
-                    </ShopkeeperRoute>
-                  } 
-                />
-                <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
-              </Routes>
-            </main>
-            <Footer />
-            <Toaster position="top-center" />
-          </div>
-        </CartProvider>
-      </AuthProvider>
-    </Router>
+    <AuthProvider>
+      <CartProvider>
+        <RouterProvider router={router} />
+        <Toaster position="top-center" />
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
